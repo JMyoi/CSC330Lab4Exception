@@ -1,17 +1,42 @@
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
-public class Main {
-    public static void main(String[] args) {
-        // Press Alt+Enter with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLOutput;
+import java.util.Scanner;
+import java.io.PrintWriter;
 
-        // Press Shift+F10 or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
+/**
+ This program prints all lines from a web page that contain
+ references to other web sites.
+ */
+public class Main
+{
+    public static void main(String[] args) throws IOException
+    {
+        Scanner console = new Scanner(System.in);
+        System.out.print("enter the web page URL: ");
+        String address = console.next();
 
-            // Press Shift+F9 to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing Ctrl+F8.
-            System.out.println("i = " + i);
+
+        URL pageLocation = new URL(address);
+        Scanner in = new Scanner(pageLocation.openStream());
+        System.out.print("Enter the Output File: ");
+        String FileName = console.next();
+        PrintWriter outFile = new PrintWriter(FileName);
+
+        while (in.hasNext())
+        {
+            String line = in.next();
+            //System.out.println(line);
+            if (line.contains("href=\"https://"))
+            {
+                int from = line.indexOf("\"");
+                int to = line.lastIndexOf("\"");
+                outFile.println(line.substring(from + 1, to));
+                //System.out.println(line.substring(from + 1, to));
+            }
         }
+        console.close();
+        in.close();
+        outFile.close();
     }
 }
