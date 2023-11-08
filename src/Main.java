@@ -16,27 +16,36 @@ public class Main
         System.out.print("enter the web page URL: ");
         String address = console.next();
 
-
-        URL pageLocation = new URL(address);
-        Scanner in = new Scanner(pageLocation.openStream());
         System.out.print("Enter the Output File: ");
         String FileName = console.next();
-        PrintWriter outFile = new PrintWriter(FileName);
-
-        while (in.hasNext())
-        {
-            String line = in.next();
-            //System.out.println(line);
-            if (line.contains("href=\"https://"))
-            {
-                int from = line.indexOf("\"");
-                int to = line.lastIndexOf("\"");
-                outFile.println(line.substring(from + 1, to));
-                //System.out.println(line.substring(from + 1, to));
-            }
+        try{
+            printToFile(address, FileName);
+        }
+        catch(IOException e){
+            //e.printStackTrace();
+            System.out.println("exception caught");
         }
         console.close();
-        in.close();
-        outFile.close();
+    }
+
+    public static void printToFile(String address, String fileName) throws java.io.IOException {
+
+        URL pageLocation = new URL(address);
+        try(Scanner in = new Scanner(pageLocation.openStream()); PrintWriter outFile = new PrintWriter(fileName);)
+        {
+            while (in.hasNext())
+            {
+                String line = in.next();
+                //System.out.println(line);
+                if (line.contains("href=\"https://"))
+                {
+                    int from = line.indexOf("\"");
+                    int to = line.lastIndexOf("\"");
+                    outFile.println(line.substring(from + 1, to));
+                    //System.out.println(line.substring(from + 1, to));
+                }
+            }
+        }
+
     }
 }
