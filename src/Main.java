@@ -5,8 +5,7 @@ import java.util.Scanner;
 import java.io.PrintWriter;
 
 /**
- This program prints all lines from a web page that contain
- references to other web sites.
+ This program prints all data from a web page and writes it to a file given by user.
  */
 public class Main
 {
@@ -17,13 +16,17 @@ public class Main
         String address = console.next();
 
         System.out.print("Enter the Output File: ");
-        String FileName = console.next();
+        String fileName = console.next();
         try{
-            printToFile(address, FileName);
+            printToFile(address, fileName);
         }
         catch(IOException e){
-            //e.printStackTrace();
-            System.out.println("exception caught");
+            if(e.getClass().getSimpleName().equals("MalformedURLException")){
+                System.out.println("Incorrect address");
+            }
+            else {
+                System.out.println(e.getClass().getSimpleName() + "exception caught: " + e.getMessage());
+            }
         }
         console.close();
     }
@@ -36,14 +39,14 @@ public class Main
             while (in.hasNext())
             {
                 String line = in.next();
-                //System.out.println(line);
-                if (line.contains("href=\"https://"))
-                {
-                    int from = line.indexOf("\"");
-                    int to = line.lastIndexOf("\"");
-                    outFile.println(line.substring(from + 1, to));
-                    //System.out.println(line.substring(from + 1, to));
-                }
+                outFile.println(line);
+                //code to display all lines from a web page that contain references to other web sites.
+//                if (line.contains("href=\"https://"))
+//                {
+//                    int from = line.indexOf("\"");
+//                    int to = line.lastIndexOf("\"");
+//                    outFile.println(line.substring(from + 1, to));
+//                }
             }
         }
 
